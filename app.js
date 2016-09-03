@@ -46,20 +46,22 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+/* heroku Host */
 passport.use(new FacebookStrategy({
-  /* Local Host
+    clientID: '778533818956590',
+    clientSecret: 'e29dcaf9644c8c1105155854914e7a8a',
+    callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
+    profileFields: ['id', 'emails', 'name','displayName'],
+  },
+  /* local host 
+  passport.use(new FacebookStrategy({
+   Local Host
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  },*/
-  /* Heroku Host */
-   clientID: '778533818956590',
-    clientSecret: 'e29dcaf9644c8c1105155854914e7a8a',
-    callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
-    profileFields: ['id', 'emails', 'name','displayName'],
   }
-
+*/
   function(accessToken, refreshToken, profile, cb) {
     var name  = profile.displayName;
     var email  = profile.emails[0].value;
