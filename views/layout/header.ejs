@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title><%= selectedMenu %></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/stylesheets/style.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <% if(typeof(user) != 'undefined' && user != null ){ %>
+             <li role="presentation" class="<% if(selectedMenu == 'users'){ %> active <% } %>"><a href="/users">Manage User</a></li>
+             <li role="presentation" class="<% if(selectedMenu == 'logout'){ %> active <% } %>"><a href="/logout">Logout</a></li>
+            <% }else { %>
+            <li role="presentation" class="<% if(selectedMenu == 'login'){ %> active <% } %>"><a href="/login">Login</a></li>
+            <li role="presentation" class="<% if(selectedMenu == 'registration'){ %> active <% } %>"><a href="/registration">Signup</a></li>
+            <% } %>
+            <li role="presentation" class="<% if(selectedMenu == 'contact'){ %> active <% } %>"><a href="/contact">Contact Us</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Demo</h3>
+        
+      </div>
+      
+      

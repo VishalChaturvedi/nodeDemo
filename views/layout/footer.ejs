@@ -1,0 +1,60 @@
+ <footer class="footer">
+        <p>&copy; 2016 Company, Inc.</p>
+      </footer>
+
+    </div> <!-- /container -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.1/jquery.validate.min.js"></script>
+    <script>
+
+    // validate login form 
+    $("#login").validate({
+			rules: {
+				password: {
+					required: true,
+					minlength: 6
+				},
+			email: {
+				required: true,
+				email: true
+			}
+		}
+	});
+
+	// validate sign up form 
+    $("#registration").validate({
+			rules: {
+				name: {
+					required: true,
+				},
+				password: {
+					required: true,
+					minlength: 6
+				},
+			email: {
+				required: true,
+				email: true
+			}
+		}
+	});
+
+	// validate sign up form 
+    $("#contact").validate({
+		rules: {
+			name: {
+				required: true,
+			},
+			comment: {
+				required: true,
+				minlength: 6,
+				maxlength: 150
+			},
+			email: {
+				required: true,
+				email: true
+			}
+		}
+	});
+    </script>
+  </body>
+</html>

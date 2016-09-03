@@ -1,0 +1,26 @@
+<%- include('layout/header'); %>  
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Contact Us</h1>
+      <% if(success != ''){ %>
+     <p class="alert alert-success"><%= success %></p>
+     <% } %>
+      <form method="post" action="" name="contact" id="contact" novalidate="novalidate">
+        <div class="form-group">
+          <label for="name">Full name</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" ng-model="vm.credentials.name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" ng-model="vm.credentials.email">
+        </div>
+        <div class="form-group">
+          <label for="password">Comment</label>
+          
+          <textarea class="form-control" name="comment" id="comment"  ng-model="vm.credentials.comment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+  </div>
+  <%- include('layout/footer') %>
