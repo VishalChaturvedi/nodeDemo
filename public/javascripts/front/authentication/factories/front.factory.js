@@ -42,7 +42,7 @@
              * @formData (object)
              */
             login: function(userData, callback) {
-                return $http.post('login', {password: userData.password,email: userData.email})
+                return $http.post('login/api', {password: userData.password,email: userData.email})
                     .success(function(response) {
                     callback(response);
                 })

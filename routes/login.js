@@ -19,14 +19,14 @@ router.post('/',
 
             ),
 function(req, res) {
-    req.flash('success', 'You are now logged in');
+   // req.flash('success', 'You are now logged in');
     req.flash('userRole', req.user.userRole);
-    res.redirect('/admin/');
-   /* var response = {
+   // res.redirect('/admin/');
+    var response = {
         status:'ture'
     }
     res.send(response);
-    */
+    
     /* if(req.user.userRole == "0"){
         res.redirect('/admin/');
     }else{
@@ -54,6 +54,7 @@ router.post('/api', function(req, res, next) {
       if (err) { 
         return next(err); 
       }
+      req.flash('userRole', req.user.userRole);
       var response = {
             status:'true'
         }
