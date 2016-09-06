@@ -7,9 +7,12 @@
 		'demoApp.authentication',
         'demoApp.common'
 	])
-	
-	.config(config)
-    .run(run);
+	.config(['$routeProvider', '$sceDelegateProvider',
+        function ($routeProvider, $sceDelegateProvider) {
+
+    $sceDelegateProvider.resourceUrlWhitelist(['self', new RegExp('^(http[s]?):\/\/(w{3}.)?youtube\.com/.+$')]);
+
+}])    .run(run);
 
 	/* Gloabl routing are here 
 	config.$inject = ['$routeProvider'];
