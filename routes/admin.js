@@ -44,8 +44,9 @@ router.post('/userDetails',ensureAuthenticated, function(req, res, next) {
 router.post('/updateUserProfile',ensureAuthenticated, function(req, res, next) {
    var id = req.user.id;
    var data = req.body.userData;
-
-   User.updateUser(id, data, function(err, User) {
+   User.getUserByEmail(data.email, function(err, user) {
+    if(user._id == id){
+        User.updateUser(id, data, function(err, User) {
         if (err){
                 throw err;
         }
@@ -56,34 +57,54 @@ router.post('/updateUserProfile',ensureAuthenticated, function(req, res, next) {
             res.send(response);    
         }
     });
+    }else{
+            var response = {
+                status:'false',
+                message:'Provided mail id already use by someone else'
+            }
+            res.send(response);
+        }
+    }); 
 });
 
 /* set user profile details. */
 router.post('/updateUserDetails',ensureAuthenticated, function(req, res, next) {
-   var id = req.body.userData._id;
-   var data = req.body.userData;
-   
-   User.updateUser(id, data, function(err, User) {
-        if (err){
-                throw err;
-                console.log(err);
-        }
-        else{
+    var id = req.body.userData._id;
+    var data = req.body.userData;
+    User.getUserByEmail(data.email, function(err, user) {
+        if(user._id == id){
+            User.updateUser(id, data, function(err, User) {
+                if (err){
+                    throw err;
+                }
+                else{
+                    var response = {
+                        status:'true'
+                    }
+                    res.send(response);    
+                }
+            }); 
+        }else{
             var response = {
-                status:'true'
+                status:'false',
+                message:'Provided mail id already use by someone else'
             }
-            res.send(response);    
+            res.send(response);
         }
-    });
+    }); 
 });
 
 /* remove user hard delete */
 router.post('/userDelete',ensureAuthenticated, function(req, res, next) {
     var id = req.body.userID;
-    console.log(id);
     User.deleteUser(id, function(err, success) {
         if (err){
                 throw err;
+                var response = {
+                    status:'false',
+                    message:'There are some error. Please try again'
+            }
+            res.send(response);
         }
         else{
             var response = {

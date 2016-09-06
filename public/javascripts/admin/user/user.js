@@ -48,6 +48,7 @@
         vm.edit = edit;
         vm.save = save;
         vm.delete1 = delete1;
+        vm.SelectedUser = {};
 
         $scope.sortType     = 'name'; // set the default sort type
         $scope.sortReverse  = false;  // set the default sort order
@@ -74,6 +75,8 @@
                 if (response.status) {
                     
                     vm.userData = response.data;
+                    vm.SelectedUser = response.data;
+                    //console.log(vm.SelectedUser);
                 } else
                     $location.path('/user/login');
             });
@@ -82,13 +85,16 @@
         /* Function for add or save user  */
         function save() {
             UserFactory.SaveUserData(vm.userData, function (response) {
-                if (response.status) {
+                if (response.status == "true") {
                     //clear the add record form
                     toaster.pop('success', "User info", "Selected user info successfully updated");
                     vm.userData = {};
                     user_list();
-                } else
-                    $location.path('/user/login');
+                } else{
+                    toaster.pop('error', "User info", response.message);
+                   // console.log(vm.SelectedUser);
+                    vm.userData = vm.SelectedUser;
+                }
             });
         }
 
@@ -98,11 +104,13 @@
             var isCofirm = confirm('Are you sure you want to detete this user?');
             if (isCofirm) {
                 UserFactory.DeleteUserData(userID, function (response) {
-                    if (response.status) {
+                    if (response.status == "true") {
                         toaster.pop('success', "User detete", "Selected user deleted");
                         user_list();
-                    } else
-                        $location.path('/user/login');
+                    } else{
+                        toaster.pop('error', "Profile", response.message);
+                       
+                    }
                 });
             }
         }
@@ -140,16 +148,15 @@
         */
 
         function update_profile(){
-            console.log("submit profile");
-            console.log(vm.users);
             UserFactory.updateUserProfile(vm.users, function (response) {
-                if (response.status) {
+                if (response.status == 'true') {
                     //var user = response.data[0];
                     //UserFactory.SetCredentials(user.id,user.username,user.email,user.name);
-                     toaster.pop('success', "Profile", "Your profile successfully updated");
-                   // $location.path('/user');
+                    toaster.pop('success', "Profile", "Your profile successfully updated");
+                    //$location.path('/user');
                 } else{
-                   // $location.path('/user/login');
+                    toaster.pop('error', "Profile", response.message);
+                    user_details();
                 }
             });
         }
