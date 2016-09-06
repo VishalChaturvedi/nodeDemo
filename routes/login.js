@@ -13,17 +13,53 @@ router.get('/', function(req, res, next) {
 
 /* Make login  */
 router.post('/',
-        passport.authenticate('local', {failureRedirect: '/login', failureFlash: 'Invalid email or password'}),
+        passport.authenticate('local', {
+            
+            failureRedirect: '/login', failureFlash: 'Invalid email or password'}
+
+            ),
 function(req, res) {
     req.flash('success', 'You are now logged in');
     req.flash('userRole', req.user.userRole);
     res.redirect('/admin/');
-    
+   /* var response = {
+        status:'ture'
+    }
+    res.send(response);
+    */
     /* if(req.user.userRole == "0"){
         res.redirect('/admin/');
     }else{
         res.redirect('/users');
     } */
+});
+
+router.post('/api', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { 
+        var response = {
+            status:'false',
+            message:err
+        }
+    res.send(response);
+    }
+    if (!user) { 
+        var response = {
+            status:'false',
+            message:"Email and paassword are not match"
+        }
+    res.send(response);
+    }
+    req.logIn(user, function(err) {
+      if (err) { 
+        return next(err); 
+      }
+      var response = {
+            status:'true'
+        }
+    res.send(response);
+    });
+  })(req, res, next);
 });
 
 /* Passport serealize function*/

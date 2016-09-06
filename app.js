@@ -10,6 +10,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var expressValidator = require('express-validator');
 var flash = require('express-flash');
+var email = require('emailjs');
 
 var db = require('./db');
 var models = require('./models');
@@ -46,6 +47,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 /* heroku Host */
 passport.use(new FacebookStrategy({
     clientID: '778533818956590',
@@ -55,13 +57,12 @@ passport.use(new FacebookStrategy({
   },
   /* local host 
   passport.use(new FacebookStrategy({
-   Local Host
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  }
-*/
+  }, */
+
   function(accessToken, refreshToken, profile, cb) {
     var name  = profile.displayName;
     var email  = profile.emails[0].value;
@@ -97,7 +98,6 @@ app.use(expressValidator({
         var namespace = param.split('.')
             , root = namespace.shift()
             , formParam = root;
-
         while (namespace.length) {
             formParam += '[' + namespace.shift() + ']';
         }

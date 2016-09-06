@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="demoApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +16,12 @@
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/style.css" rel="stylesheet">
-
+    <script src="//code.angularjs.org/1.5.7/angular.min.js"></script>
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.css" rel="stylesheet" />
+    <script>
+         //window.path = 'https://sysdemoapp.herokuapp.com/';
+         window.path = 'http://localhost:3000/';
+    </script>
   </head>
 
   <body>
@@ -29,10 +34,10 @@
              <li role="presentation" class="<% if(selectedMenu == 'users'){ %> active <% } %>"><a href="/users">Manage User</a></li>
              <li role="presentation" class="<% if(selectedMenu == 'logout'){ %> active <% } %>"><a href="/logout">Logout</a></li>
             <% }else { %>
-            <li role="presentation" class="<% if(selectedMenu == 'login'){ %> active <% } %>"><a href="/login">Login</a></li>
-            <li role="presentation" class="<% if(selectedMenu == 'registration'){ %> active <% } %>"><a href="/registration">Signup</a></li>
+            <li role="presentation" class="<% if(selectedMenu == 'login'){ %> active <% } %>"><a href="#/login">Login</a></li>
+            <li role="presentation" class="<% if(selectedMenu == 'registration'){ %> active <% } %>"><a href="#/registration">Signup</a></li>
             <% } %>
-            <li role="presentation" class="<% if(selectedMenu == 'contact'){ %> active <% } %>"><a href="/contact">Contact Us</a></li>
+            <li role="presentation" class="<% if(selectedMenu == 'contact'){ %> active <% } %>"><a href="#/contact-us">Contact Us</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">Demo</h3>

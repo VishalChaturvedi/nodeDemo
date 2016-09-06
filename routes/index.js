@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var emailServer = require("emailjs/email");
 var Contact = require('../models/contact');
 
 
@@ -16,20 +17,9 @@ router.get('/contact', function(req, res, next) {
 
 /* GET home page. */
 router.post('/contact', function(req, res, next) {
-  	var name = req.body.name;
-  	var email = req.body.email;
-    var comment = req.body.comment;
-    // Form Validator
-   // req.checkBody('name', 'Name field is required').notEmpty();
-   // req.checkBody('comment', 'Comments field is required').notEmpty();
-
-    // Check Errors
-    var errors = req.validationErrors();
-
-    if (errors) {
-        res.render('contact', {title: 'Comment', errors: errors,selectedMenu:'contact'});
-        console.log(errors);
-    } else {
+  	var name = req.body.contactData.name;
+  	var email = req.body.contactData.email;
+    var comment = req.body.contactData.comment;
         var newContact = new Contact({
             name: name,
             email: email,
@@ -39,19 +29,41 @@ router.post('/contact', function(req, res, next) {
         Contact.createContact(newContact, function(err, Contact) {
             if (err)
                 throw err;
-            req.flash('success', 'Your reqest has been successfully submitted.');
-            res.redirect('/contact');
+           // req.flash('success', 'Your reqest has been successfully submitted.');
+           // res.redirect('/contact');
+           var response = {
+            status:'true',
+        }
+        res.send(response);
         });
 
-    }
+         var server  = emailServer.server.connect({
+        user:    "vishal.chaturvedi@systematixindia.com", 
+        password:"cntsklapgxovkika", 
+        host:    "smtp.gmail.com", 
+        ssl:     true
+    });
 
+    // send the message and get a callback with an error or details of the message that was sent
+    server.send({
+        text:    "Name:-"+name+" Email:- "+ email+" Comment:- "+ comment, 
+        from:    "Demo App <vishal.chaturvedi@systematixindia.com>", 
+        to:      "Vishal <vishal.chaturvedi@systematixindia.com>",
+        cc:       name+" <"+email+">",
+        subject: "Contact Us",
+        attachment: 
+        [
+            {data:"<html><p><b>Name:- </b>"+name+"</p><p><b>Email:- </b>"+email+"</p><p><b>Comment:- </b>"+comment+"</p></html>", alternative:true},
+           
+        ]
+    }, function(err, message) { /* console.log(err || message); */ });
 });
 
 /* logout function */
 router.get('/logout', function(req, res) {
     req.logout();
     req.flash('success', 'You are now logged out');
-    res.redirect('/login');
+    res.redirect('/');
 });
 
 module.exports = router;

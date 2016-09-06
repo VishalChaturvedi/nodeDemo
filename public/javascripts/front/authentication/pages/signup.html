@@ -1,0 +1,25 @@
+<div class="row" ng-controller="signUpController as reg">
+    <div class="col-md-12">
+      <h1>Register</h1>
+      <div ng-show="error" class="alert alert-danger">{{error}}</div>
+      <form name="registration"  ng-submit="reg.signUp()" novalidate="novalidate" role="form">
+        <div class="form-group" ng-class="{ 'has-error': registration.name.$dirty && registration.name.$error.required }">
+          <label for="name">Full name</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" ng-model="reg.user.name" required>
+          <span ng-show="registration.name.$dirty && registration.name.$error.required" class="help-block">Full name is required</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': registration.email.$dirty && registration.email.$error.required || registration.email.$error.email }">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" ng-model="reg.user.email" required>
+          <span ng-show="registration.email.$dirty && registration.email.$error.required" class="help-block">Email is required</span>
+          <span ng-show="registration.email.$dirty && registration.email.$error.email" class="help-block">Invalid email address.</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': registration.password.$dirty && registration.password.$error.required }">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="Password" ng-model="reg.user.password" required>
+          <span ng-show="registration.password.$dirty && registration.password.$error.required" class="help-block">Password is required</span>
+        </div>
+        <button type="submit" class="btn btn-default" ng-disabled="registration.$invalid || reg.dataLoading">Register!</button>
+      </form>
+    </div>
+  </div>

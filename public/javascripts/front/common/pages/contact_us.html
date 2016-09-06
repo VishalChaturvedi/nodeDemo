@@ -1,0 +1,25 @@
+<div class="row" ng-controller="contactUsController as con">
+    <div class="col-md-6">
+      <h1>Contact Us</h1>
+      <div ng-show="error" class="alert alert-danger">{{error}}</div>
+      <form name="contact"  ng-submit="con.save()" novalidate="novalidate" role="form">
+        <div class="form-group" ng-class="{ 'has-error': contact.name.$dirty && contact.name.$error.required }">
+          <label for="name">Full name</label>
+          <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" ng-model="con.contact.name" required>
+          <span ng-show="contact.name.$dirty && contact.name.$error.required" class="help-block">Name is required</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': contact.email.$dirty && contact.email.$error.required || contact.email.$error.email }">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" placeholder="Enter email" ng-model="con.contact.email" required>
+          <span ng-show="contact.email.$dirty && contact.email.$error.required" class="help-block">Email is required</span>
+          <span ng-show="contact.email.$dirty && contact.email.$error.email" class="help-block">Invalid email address.</span>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': contact.comment.$dirty && contact.comment.$error.required }">
+          <label for="password">Comment</label>
+          <textarea class="form-control" name="comment" id="comment"  ng-model="con.contact.comment" required></textarea >
+          <span ng-show="contact.comment.$dirty && contact.comment.$error.required" class="help-block">Comment is required</span>
+        </div>
+        <button type="submit" class="btn btn-default" ng-disabled="contact.$invalid || con.dataLoading">Submit</button>
+      </form>
+    </div>
+</div>

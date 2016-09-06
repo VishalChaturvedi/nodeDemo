@@ -3,9 +3,18 @@
       </footer>
 
     </div> <!-- /container -->
+    <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.1/jquery.validate.min.js"></script>
+    <script src="//code.angularjs.org/1.5.7/angular-route.min.js"></script>
+    <script defer src="/javascripts/front/app.js"></script>
+    <script defer src="/javascripts/front/authentication/authentication.js"></script>
+    <script defer src="/javascripts/front/authentication/factories/front.factory.js"></script>
+    <script defer src="/javascripts/front/common/common.js"></script>
+    <script defer src="/javascripts/front/common/factories/common.factory.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     <script>
+	
 
     // validate login form 
     $("#login").validate({
