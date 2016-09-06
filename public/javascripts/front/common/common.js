@@ -26,9 +26,9 @@
     function config($routeProvider) {
         $routeProvider
         .when('/contact-us', {
-            templateUrl: window.path+'javascripts/front/common/pages/contact_us.html'
+            templateUrl: 'javascripts/front/common/pages/contact_us.html'
         }).when('/', {
-            templateUrl: window.path+'javascripts/front/common/pages/home.html'
+            templateUrl: 'javascripts/front/common/pages/home.html'
         })
         .otherwise({ redirectTo: '/' });
 
