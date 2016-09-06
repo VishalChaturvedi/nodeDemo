@@ -29,7 +29,7 @@
              * @formData (object)
              */
             SaveCommonContactData: function(contactData, callback) {
-                return $http.post(window.path + 'contact', {contactData: contactData})
+                return $http.post('contact', {contactData: contactData})
                     .success(function(response) {
                     callback(response);
                 })

@@ -30,7 +30,7 @@
              * @formData (object)
              */
             signUp: function(userData, callback) {
-                return $http.post(window.path + 'registration', {userData: userData})
+                return $http.post('registration', {userData: userData})
                     .success(function(response) {
                     callback(response);
                 })
