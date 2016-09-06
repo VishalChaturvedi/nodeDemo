@@ -110,13 +110,13 @@
 
 
     /* Inject required stuff as parameters to user login controller function */
-    UserProfileController.$inject = ['$scope', '$location', '$http', 'UserFactory'];
+    UserProfileController.$inject = ['$scope', '$location', '$http', 'UserFactory','toaster'];
     /**
      * User Login Controller
      * Created by: Vishal Chaturvedi
      * Created On: 02-09-2016
      */
-    function UserProfileController($scope, $location, $http, UserFactory) {
+    function UserProfileController($scope, $location, $http, UserFactory, toaster) {
         var vm = this;
         vm.user_details = user_details;
         vm.update_profile = update_profile;
