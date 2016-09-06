@@ -44,13 +44,14 @@ router.post('/userDetails',ensureAuthenticated, function(req, res, next) {
 router.post('/updateUserProfile',ensureAuthenticated, function(req, res, next) {
    var id = req.user.id;
    var data = req.body.userData;
+
    User.updateUser(id, data, function(err, User) {
         if (err){
                 throw err;
         }
         else{
             var response = {
-                    status:'true'
+                status:'true'
             }
             res.send(response);    
         }
@@ -61,14 +62,15 @@ router.post('/updateUserProfile',ensureAuthenticated, function(req, res, next) {
 router.post('/updateUserDetails',ensureAuthenticated, function(req, res, next) {
    var id = req.body.userData._id;
    var data = req.body.userData;
-   console.log(data);
+   
    User.updateUser(id, data, function(err, User) {
         if (err){
                 throw err;
+                console.log(err);
         }
         else{
             var response = {
-                    status:'true'
+                status:'true'
             }
             res.send(response);    
         }
