@@ -145,11 +145,11 @@
             UserFactory.updateUserProfile(vm.users, function (response) {
                 if (response.status) {
                     var user = response.data[0];
-                     toaster.pop('success', "Profile", "Your profile successfully updated");
                     UserFactory.SetCredentials(user.id,user.username,user.email,user.name);
-                    $location.path('/user');
+                     toaster.pop('success', "Profile", "Your profile successfully updated");
+                   // $location.path('/user');
                 } else{
-                    $location.path('/user/login');
+                   // $location.path('/user/login');
                 }
             });
         }
