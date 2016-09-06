@@ -144,8 +144,8 @@
             console.log(vm.users);
             UserFactory.updateUserProfile(vm.users, function (response) {
                 if (response.status) {
-                    var user = response.data[0];
-                    UserFactory.SetCredentials(user.id,user.username,user.email,user.name);
+                    //var user = response.data[0];
+                    //UserFactory.SetCredentials(user.id,user.username,user.email,user.name);
                      toaster.pop('success', "Profile", "Your profile successfully updated");
                    // $location.path('/user');
                 } else{
