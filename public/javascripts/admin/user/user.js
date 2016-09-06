@@ -26,9 +26,9 @@
     function config($routeProvider) {
         $routeProvider
         .when('/profile', {
-            templateUrl: window.path+'javascripts/admin/user/pages/profile.html'
+            templateUrl: 'javascripts/admin/user/pages/profile.html'
         }).when('/user', {
-            templateUrl: window.path+'javascripts/admin/user/pages/userlist.html'
+            templateUrl: 'javascripts/admin/user/pages/userlist.html'
         })
         .otherwise({ redirectTo: '/profile' });
     }

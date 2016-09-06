@@ -27,11 +27,11 @@
     function config($routeProvider) {
         $routeProvider
         .when('/login', {
-            templateUrl: window.path+'javascripts/front/authentication/pages/login.html'
+            templateUrl: 'javascripts/front/authentication/pages/login.html'
         }).when('/registration', {
-            templateUrl: window.path+'javascripts/front/authentication/pages/signup.html'
+            templateUrl: 'javascripts/front/authentication/pages/signup.html'
         }).when('/registration', {
-            templateUrl: window.path+'javascripts/front/authentication/pages/signup.html'
+            templateUrl: 'javascripts/front/authentication/pages/signup.html'
         })
         .otherwise({ redirectTo: '/' });
 
