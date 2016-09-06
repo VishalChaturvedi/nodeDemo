@@ -11,7 +11,8 @@
      */
 	angular
 	.module('adminApp.user', [
-    	'ngRoute'
+    	'ngRoute',
+        'toaster'
 	])
 	.config(config)
     .controller('UserController', UserController)
@@ -35,13 +36,13 @@
 
 
     /* Inject required stuff as parameters to user controller function */
-    UserController.$inject = ['$scope', '$location', '$http', 'UserFactory'];
+    UserController.$inject = ['$scope', '$location', '$http', 'UserFactory','toaster'];
     /**
      * User Controller
      * Created by: Vishal Chaturvedi
      * Created On: 02-09-2016
      */
-    function UserController($scope, $location, $http, UserFactory) {
+    function UserController($scope, $location, $http, UserFactory,toaster) {
         var vm = this;
         vm.user_list = user_list;
         vm.edit = edit;
@@ -60,8 +61,7 @@
                     vm.users = response.data;
 
                 }else{
-                    console.log("else");
-                    $location.path('/user/login');
+                    //$location.path('/user/login');
                 }
             });
         }
@@ -72,7 +72,7 @@
         function edit(userID) {
             UserFactory.GetUserData(userID, function (response) {
                 if (response.status) {
-                    console.log(response);
+                    
                     vm.userData = response.data;
                 } else
                     $location.path('/user/login');
@@ -81,10 +81,10 @@
 
         /* Function for add or save user  */
         function save() {
-            console.log("success");
             UserFactory.SaveUserData(vm.userData, function (response) {
                 if (response.status) {
                     //clear the add record form
+                    toaster.pop('success', "User info", "Selected user info successfully updated");
                     vm.userData = {};
                     user_list();
                 } else
@@ -99,6 +99,7 @@
             if (isCofirm) {
                 UserFactory.DeleteUserData(userID, function (response) {
                     if (response.status) {
+                        toaster.pop('success', "User detete", "Selected user deleted");
                         user_list();
                     } else
                         $location.path('/user/login');
@@ -123,6 +124,7 @@
             // get user's details
             UserFactory.GetUserProfileData(function (response) {
                 if (response.status){ 
+
                     vm.users = response.data;
                 }else{
                     $location.path('/user/login');
@@ -143,10 +145,12 @@
             UserFactory.updateUserProfile(vm.users, function (response) {
                 if (response.status) {
                     var user = response.data[0];
+                     toaster.pop('success', "Profile", "Your profile successfully updated");
                     UserFactory.SetCredentials(user.id,user.username,user.email,user.name);
                     $location.path('/user');
-                } else
+                } else{
                     $location.path('/user/login');
+                }
             });
         }
     }
