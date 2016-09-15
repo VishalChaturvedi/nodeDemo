@@ -1,0 +1,25 @@
+<div class="col-md-12" ng-controller="ChatController as chat">
+  <div id="messageArea" class="row">
+      <div class="col-md-4">
+        <div class="well"> 
+          <h3>Online Users</h3>
+          <ul>
+            <li ng-repeat="customer in newCustomers">{{customer.name}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chat" id="chat"></div>
+        <form id="messageFrom">
+          <div class="form-group">
+            <label ng-bind="typingNotification"></label>
+            <br/>
+            <label>Enter Message</label>
+            <textarea class="form-control" id="message" ng-keyup="typing()"></textarea>
+            <br/>
+            <input type="submit" class="btn btn-primary" value="Send Message">
+          </div>
+        </form>
+      </div>
+    </div>
+</div>

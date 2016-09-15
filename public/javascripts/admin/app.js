@@ -4,7 +4,8 @@
 	angular
 	.module('adminApp', [
 		'ngRoute',
-		'adminApp.user'
+		'adminApp.user',
+        'adminApp.chat'
 	])
 	
 	.config(config)

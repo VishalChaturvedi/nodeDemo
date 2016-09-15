@@ -10,6 +10,7 @@ var usersSchema = mongoose.Schema({
     password:String,
     userRole:{ type: String, default: '1' },
     userStatus:{ type: String, default: '1' },
+    loginStatus:{ type: String, default: '0' },
     createdDate:{ type: Date, default: Date.now }
 	});
 	

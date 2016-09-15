@@ -56,6 +56,10 @@ router.post('/api', function(req, res, next) {
         return next(err); 
       }
       req.flash('userRole', req.user.userRole);
+        req.app.io.emit('notification', {
+            message: 'new customer',
+            name: req.user.name
+        });
       var response = {
             status:'true'
         }

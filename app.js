@@ -12,6 +12,8 @@ var expressValidator = require('express-validator');
 var flash = require('express-flash');
 var email = require('emailjs');
 
+
+
 var db = require('./db');
 var models = require('./models');
 var User = models('users');
@@ -21,12 +23,45 @@ var users = require('./routes/users');
 var admin = require('./routes/admin');
 var login = require('./routes/login');
 var registration = require('./routes/registration');
-
 var app = express();
 
+/* Socket Connnection */
+var http = require('http').Server(app);
+http.listen(8080, "127.0.0.1");
+var io = require('socket.io')(http);
+app.io = io;
+/* End socket connection */
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+io.on('connection', function(socket){
+  //console.log('a user connected');
+  socket.on('disconnect',function(data){
+    io.emit('notification', {
+      message: 'remove customer'
+    });
+    //console.log('Disconnected: %s sockets connected', connections.length);
+  });
+
+  /*
+  socket.on('add-customer', function(customer) {
+    io.emit('notification', {
+      message: 'new customer',
+      customer: customer
+    });
+  }); */
+
+  socket.on('typing', function(customer) {
+    //console.log("This is testing");
+    console.log(customer);
+    io.emit('typing', {
+      message: 'typing',
+      customer: customer
+    });
+  });
+});
+
 
 
 // uncomment after placing your favicon in /public
@@ -48,20 +83,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-/* heroku Host 
+/* heroku Host */
 passport.use(new FacebookStrategy({
     clientID: '778533818956590',
     clientSecret: 'e29dcaf9644c8c1105155854914e7a8a',
     callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  }, */
-  /* local host */
+  }, 
+  /* local host 
   passport.use(new FacebookStrategy({
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  }, 
+  }, */
 
   function(accessToken, refreshToken, profile, cb) {
     var name  = profile.displayName;
@@ -118,6 +153,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 /** Store the session user for every request */
 app.get('*', function(req, res, next){
   res.locals.user = req.user || null;
+
   next();
 });
 

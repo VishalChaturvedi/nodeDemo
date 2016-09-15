@@ -18,9 +18,10 @@
 
     <!-- JS Section -->
     <script src="//code.angularjs.org/1.5.7/angular.min.js"></script>
+     <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
     <script>
-         //window.path = 'https://sysdemoapp.herokuapp.com/';
-         window.path = 'http://localhost:3000/';
+         window.path = 'https://sysdemoapp.herokuapp.com/';
+         //window.path = 'http://localhost:3000/';
     </script>
   </head>
 
@@ -30,9 +31,11 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             <% if(typeof(user) != 'undefined' && user != null ){ %>
+
               <% if(userRole == '0'){ %>
               <li role="presentation"><a href="#/user">Manage User</a></li>
               <% } %>
+            <li role="presentation"><a href="#/chat">Chat</a></li>  
             <li role="presentation"><a href="#/profile">Profile</a></li>
             <li role="presentation"><a href="/logout">Logout</a></li>
             <% }else { %>
@@ -64,6 +67,8 @@
     <script defer src="/javascripts/admin/app.js"></script>
     <script defer src="/javascripts/admin/user/user.js"></script>
     <script defer src="/javascripts/admin/user/factories/user.factory.js"></script>
+    <script defer src="/javascripts/admin/chat/chat.js"></script>
+    <script defer src="/javascripts/admin/chat/factories/socket.factory.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
     
   </body>
