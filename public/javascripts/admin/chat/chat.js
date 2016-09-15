@@ -29,7 +29,7 @@
         .when('/chat', {
             templateUrl: window.path+'javascripts/admin/chat/pages/chat.html'
         })
-        .otherwise({ redirectTo: '/chat' });
+        .otherwise({ redirectTo: '/profile' });
     }
 
 
