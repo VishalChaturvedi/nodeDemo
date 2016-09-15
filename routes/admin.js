@@ -44,52 +44,102 @@ router.post('/userDetails',ensureAuthenticated, function(req, res, next) {
 router.post('/updateUserProfile',ensureAuthenticated, function(req, res, next) {
    var id = req.user.id;
    var data = req.body.userData;
-   User.getUserByEmail(data.email, function(err, user) {
-    if(user._id == id){
-        User.updateUser(id, data, function(err, User) {
-        if (err){
-                throw err;
-        }
-        else{
-            var response = {
-                status:'true'
+   User.getUserById(id, function(err, user) {
+        if(user.email == data.email){
+            User.updateUser(id, data, function(err, User) {
+            if (err){
+                    throw err;
             }
-            res.send(response);    
-        }
-    });
-    }else{
-            var response = {
-                status:'false',
-                message:'Provided mail id already use by someone else'
+            else{
+                var response = {
+                    status:'true'
+                }
+                res.send(response);    
             }
-            res.send(response);
+        });
+        }else{
+            User.getUserByEmail(data.email, function(err, user) {
+                if (err){
+                    throw err;
+                    var response = {
+                        status:'false',
+                        message:'Technical error! Please try again later.'
+                    }
+                    res.send(response);
+                }else{
+                if(user == null){
+                    User.updateUser(id, data, function(err, User) {
+                        if (err){
+                            throw err;
+                        }
+                        else{
+                            var response = {
+                                status:'true'
+                            }
+                        res.send(response);    
+                        }
+                    }); 
+                }else{
+                    var response = {
+                        status:'false',
+                        message:'Provided mail id already use by someone else'
+                    }
+                    res.send(response);
+                }
+                }
+            });   
         }
-    }); 
+    });   
 });
 
 /* set user profile details. */
 router.post('/updateUserDetails',ensureAuthenticated, function(req, res, next) {
     var id = req.body.userData._id;
     var data = req.body.userData;
-    User.getUserByEmail(data.email, function(err, user) {
-        if(user._id == id){
+    User.getUserById(id, function(err, user) {
+        if(user.email == data.email){
             User.updateUser(id, data, function(err, User) {
+            if (err){
+                    throw err;
+            }
+            else{
+                var response = {
+                    status:'true'
+                }
+                res.send(response);    
+            }
+        });
+        }else{
+            User.getUserByEmail(data.email, function(err, user) {
                 if (err){
                     throw err;
-                }
-                else{
                     var response = {
-                        status:'true'
+                        status:'false',
+                        message:'Technical error! Please try again later.'
                     }
-                    res.send(response);    
+                    res.send(response);
+                }else{
+                if(user == null){
+                    User.updateUser(id, data, function(err, User) {
+                        if (err){
+                            throw err;
+                        }
+                        else{
+                            var response = {
+                                status:'true'
+                            }
+                        res.send(response);    
+                        }
+                    }); 
+                }else{
+                    var response = {
+                        status:'false',
+                        message:'Provided mail id already use by someone else'
+                    }
+                    res.send(response);
                 }
-            }); 
-        }else{
-            var response = {
-                status:'false',
-                message:'Provided mail id already use by someone else'
-            }
-            res.send(response);
+                }
+            });   
         }
     }); 
 });
