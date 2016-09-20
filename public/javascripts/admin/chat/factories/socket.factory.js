@@ -22,7 +22,7 @@
      */
     function SocketFactory($http, $location, $rootScope)
     {
-        var socket = io.connect();
+        var socket = io.connect("https://sysdemoapp.herokuapp.com:5000");
         return {
             on: function(eventName, callback){
                 socket.on(eventName, callback);
