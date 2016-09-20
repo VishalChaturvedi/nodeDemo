@@ -22,7 +22,7 @@
      */
     function SocketFactory($http, $location, $rootScope)
     {
-        var socket = io.connect();
+        var socket = io.connect("http://localhost:3000");
         return {
             on: function(eventName, callback){
                 socket.on(eventName, callback);

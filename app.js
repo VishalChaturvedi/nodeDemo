@@ -29,7 +29,7 @@ var app = express();
 
 /* Socket Connnection */
 var http = require('http').Server(app);
-http.listen(5000, "127.0.0.1");
+http.listen(3000, "127.0.0.1");
 var io = require('socket.io')(http);
 app.io = io;
 /* End socket connection */
