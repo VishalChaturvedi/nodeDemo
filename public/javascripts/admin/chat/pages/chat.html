@@ -1,21 +1,34 @@
-<div class="col-md-12" ng-controller="ChatController as chat">
+<div class="col-md-12 chat-p-container" >
   <div id="messageArea" class="row">
-      <div class="col-md-4">
+      <div class="col-md-4" ng-controller="ChatController as chat">
         <div class="well"> 
           <h3>Online Users</h3>
-          <ul>
-            <li ng-repeat="customer in newCustomers">{{customer.name}}</li>
+          <ul style="list-style: outside none none;">
+            <li ng-repeat="customer in newCustomers">
+              {{customer.name}}
+              <a href=""><span ng-class="(customer.loginStatus==1) ? 'glyphicon glyphicon-ok-sign' : ''"></span> </a>
+            </li>
           </ul>
         </div>
       </div>
-      <div class="col-md-8">
-        <div class="chat" id="chat"></div>
-        <form id="messageFrom">
+      <div class="col-md-8 chat-container" ng-controller="MessagesController as msz">
+        <div class="chat" id="chat">
+          <ul style="list-style: outside none none; margin: 0px 10px;">
+            <li ng-repeat="messages in newMessage" class="clear">
+              <span id="name" ng-class="(messages.self == true) ? 'right' : 'left'">
+                {{messages.message}}
+              </span>
+              <div class="clear"></div>
+              <label ng-class="(messages.self == true) ? 'right' : 'left'">{{messages.senderName}}</label>
+            </li>
+          </ul>
+        </div>
+        <form name="form" ng-submit="msz.send_message()" role="form">
           <div class="form-group">
             <label ng-bind="typingNotification"></label>
             <br/>
             <label>Enter Message</label>
-            <textarea class="form-control" id="message" ng-keyup="typing()"></textarea>
+            <textarea class="form-control" id="message" name="message" ng-bind="chat.message" ng-model="msz.chat.message" ng-keyup="typing()"></textarea>
             <br/>
             <input type="submit" class="btn btn-primary" value="Send Message">
           </div>

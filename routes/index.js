@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var emailServer = require("emailjs/email");
 var Contact = require('../models/contact');
-
+var models = require('../models');
+var User = models('users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -61,7 +62,16 @@ router.post('/contact', function(req, res, next) {
 
 /* logout function */
 router.get('/logout', function(req, res) {
+    var id = req.user.id;
+    var name = req.user.name;
     req.logout();
+    User.updateUser(id,{loginStatus:0}, function(err, User) {
+            
+    }); 
+    req.app.io.emit('notification', {
+            message: 'Left user',
+            name: name
+    });
     req.flash('success', 'You are now logged out');
     res.redirect('/');
 });

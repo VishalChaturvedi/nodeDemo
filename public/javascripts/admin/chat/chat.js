@@ -12,11 +12,12 @@
 	angular
 	.module('adminApp.chat', [
     	'ngRoute',
-        'toaster'
+        'toaster',
+        'ngCookies'
 	])
 	.config(config)
     .controller('ChatController', ChatController)
-    .controller('ChatListController', ChatListController);
+    .controller('MessagesController', MessagesController);
 
     /**
      * Configuration
@@ -29,18 +30,18 @@
         .when('/chat', {
             templateUrl: window.path+'javascripts/admin/chat/pages/chat.html'
         })
-        .otherwise({ redirectTo: '/profile' });
+        .otherwise({ redirectTo: '/chat' });
     }
 
 
     /* Inject required stuff as parameters to user controller function */
-    ChatController.$inject = ['$scope', '$location', '$http', 'SocketFactory', 'UserFactory','toaster'];
+    ChatController.$inject = ['$scope', '$location', '$http', 'SocketFactory', 'UserFactory','toaster','$cookies','$timeout'];
     /**
      * Chat Controller
      * Created by: Vishal Chaturvedi
      * Created On: 08-09-2016
      */
-    function ChatController($scope, $location, $http, SocketFactory,UserFactory,toaster) {
+    function ChatController($scope, $location, $http, SocketFactory,UserFactory,toaster,$cookies,$timeout) {
 
         $scope.newCustomers = [];
         $scope.currentCustomer = [];
@@ -61,73 +62,99 @@
         }
         getOnlineUser();
 
+        
 
         SocketFactory.on('notification', function(data) {
             $scope.$apply(function () {
                 $scope.currentCustomer.push(data);
-                toaster.pop('success', "New User", data);
+                if(data.message == "Join user")    
+                    toaster.pop('success', data.message, data.name);
+                else
+                    toaster.pop('error', data.message, data.name);
+                getOnlineUser();
             });
         });
 
         function typing(){
-            
-            SocketFactory.emit('typing', function(currentCustomer) {
-               
-            });
+            var UserInfo = $cookies.get('demoApp');
+            SocketFactory.emit('typing',UserInfo);
         }
 
         SocketFactory.on('typing', function(data) {
-            console.log(currentCustomer);
             $scope.$apply(function () {
-                
+                var UserInfo = $cookies.getObject('demoApp');
+                data = JSON.parse(data);
+                if(data.name != UserInfo.name){
+                    $scope.typingNotification = data.name+" is typeing";
+                    $timeout(function(){
+                        $scope.typingNotification= '';    
+                    }, 3000);
+                }
             });
         });
-    }
-
+    }    
 
     /* Inject required stuff as parameters to user login controller function */
-    ChatListController.$inject = ['$scope', '$location', '$http', 'SocketFactory','toaster'];
+    MessagesController.$inject = ['$scope', '$location', '$http', 'SocketFactory','toaster','$cookies','ChatFactory'];
     /**
      * User Login Controller
      * Created by: Vishal Chaturvedi
      * Created On: 08-09-2016
      */
-    function ChatListController($scope, $location, $http, SocketFactory, toaster) {
+    function MessagesController($scope, $location, $http, SocketFactory, toaster,$cookies,ChatFactory) {
+        $scope.newMessage = [];
+        $scope.send_message = send_message;
         var vm = this;
-        vm.user_details = user_details;
-        vm.update_profile = update_profile;
-        function user_details() {
-            // get user's details
-            UserFactory.GetUserProfileData(function (response) {
+        vm.send_message = send_message;
+        var UserInfo = $cookies.get('demoApp');
+        UserInfo = JSON.parse(UserInfo);
+
+        /* Get Old messages */
+        function getChatMessages(){
+            ChatFactory.GetChatMessages(function (response) {
                 if (response.status){ 
-
-                    vm.users = response.data;
+                    var UserInfo = $cookies.getObject('demoApp');
+                    angular.forEach(response.data, function(value, key) {
+                        
+                        if(value.senderName != UserInfo.name){
+                            $scope.newMessage.push(value);
+                        }else{
+                            value['self'] = true;
+                            $scope.newMessage.push(value);
+                        }
+                    });
+                    //$scope.newMessage = response.data;
                 }else{
-                    $location.path('/user/login');
+                    //$location.path('/user/login');
                 }
             });
         }
-        user_details();
+        getChatMessages();
+        /* Send Messages */
+        function send_message(){
+            if(vm.chat.message !=''){
+                var data = {
+                    senderId:UserInfo.id,
+                    message:vm.chat.message,
+                    senderName:UserInfo.name
+                }
+                //clear the add record form
+                vm.chat.message = '';
+                SocketFactory.emit('send-message',data);
+            }
+        }
 
-        /**
-         * User update_profile Controller
-         * Created by: Vishal Chaturvedi
-         * Created On: 08-09-2016
-        */
-
-        function update_profile(){
-            UserFactory.updateUserProfile(vm.users, function (response) {
-                if (response.status == 'true') {
-                    //var user = response.data[0];
-                    //UserFactory.SetCredentials(user.id,user.username,user.email,user.name);
-                    toaster.pop('success', "Profile", "Your profile successfully updated");
-                    //$location.path('/user');
-                } else{
-                    toaster.pop('error', "Profile", response.message);
-                    user_details();
+        /* Recived Messages */
+        SocketFactory.on('received-message', function(data) {
+            $scope.$apply(function () {
+                var UserInfo = $cookies.getObject('demoApp');
+                if(data.senderName != UserInfo.name){
+                    $scope.newMessage.push(data);
+                }else{
+                    data['self'] = true;
+                    $scope.newMessage.push(data);
                 }
             });
-        }
+        });
     }
-
 })();

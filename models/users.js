@@ -80,3 +80,11 @@ module.exports.getUsers = function(query, callback) {
 module.exports.createFbUser = function(newUser, callback){
         newUser.save(callback);
 }
+
+/* A functiono for get login user */
+module.exports.getLoggedInUser = function(callback){
+  var login = new User({ loginStatus: '1' });
+  login.findSimilarTypes(function(err, login) {
+    //console.log(login); // woof
+  });
+}

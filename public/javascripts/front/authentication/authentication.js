@@ -12,7 +12,8 @@
 	angular
 	.module('demoApp.authentication', [
     	'ngRoute',
-        'toaster'
+        'toaster',
+        'ngCookies'
 	])
 	.config(config)
     .controller('loginController', loginController)
@@ -40,13 +41,13 @@
 
 
     /* Inject required stuff as parameters to user controller function */
-    loginController.$inject = ['$scope', '$location', '$http', 'FrontFactory','toaster','$window'];
+    loginController.$inject = ['$scope', '$location', '$http', 'FrontFactory','toaster','$window','$cookies'];
     /**
      * login Controller
      * Created by: Vishal Chaturvedi
      * Created On: 06-09-2016
      */
-    function loginController($scope, $location, $http, FrontFactory,toaster,$window) {
+    function loginController($scope, $location, $http, FrontFactory,toaster,$window,$cookies) {
         var vm = this;
         vm.login = login;
         
@@ -54,9 +55,11 @@
         function login() {
             // get all users
             FrontFactory.login(vm.user,function (response) {
-                console.log(response);
                 if (response.status == "true"){ 
+                    $cookies.put('demoApp', '');
                     toaster.pop('success', "Login", "You have successfully logged in");
+                    // Setting a cookie
+                    $cookies.putObject('demoApp', response.data);
                     $window.location.href = window.path+'admin';
                 }else{
                     toaster.pop('error', "Registration", response.message);

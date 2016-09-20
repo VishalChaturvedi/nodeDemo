@@ -11,15 +11,17 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var expressValidator = require('express-validator');
 var flash = require('express-flash');
 var email = require('emailjs');
-
+users = [];
+connections = [];
 
 
 var db = require('./db');
 var models = require('./models');
 var User = models('users');
+var Chat = models('chat');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var chat = require('./routes/chat');
 var admin = require('./routes/admin');
 var login = require('./routes/login');
 var registration = require('./routes/registration');
@@ -27,7 +29,7 @@ var app = express();
 
 /* Socket Connnection */
 var http = require('http').Server(app);
-http.listen(8080, "127.0.0.1");
+http.listen(5000, "127.0.0.1");
 var io = require('socket.io')(http);
 app.io = io;
 /* End socket connection */
@@ -36,29 +38,43 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 io.on('connection', function(socket){
-  //console.log('a user connected');
+  connections.push(socket);
+  var cookies = parseCookies(socket.client.request.headers.cookie);
+  cookies = JSON.parse(decodeURIComponent(cookies.demoApp));
+  socket.userid = cookies.id;
+  socket.username = cookies.name;
+  users.push(socket.userid);
+  
   socket.on('disconnect',function(data){
-    io.emit('notification', {
-      message: 'remove customer'
-    });
-    //console.log('Disconnected: %s sockets connected', connections.length);
+    console.log(socket.userid);
+    users.splice(users.indexOf(socket.userid),1);
+    connections.splice(connections.indexOf(socket),1);
+     io.emit('notification', {
+            message: 'Left user',
+            name: socket.username
+    }); 
+    User.updateUser(socket.userid,{loginStatus:0}, function(err, User) {
+            
+    }); 
   });
 
-  /*
-  socket.on('add-customer', function(customer) {
-    io.emit('notification', {
-      message: 'new customer',
-      customer: customer
-    });
-  }); */
+  socket.on('typing', function(data) {
+    io.emit('typing', data);
+  });
 
-  socket.on('typing', function(customer) {
-    //console.log("This is testing");
-    console.log(customer);
-    io.emit('typing', {
-      message: 'typing',
-      customer: customer
+  socket.on('send-message', function(data) {
+    var newChat = new Chat({
+      senderId: data.senderId,
+      senderName: data.senderName,
+      message: data.message 
     });
+    Chat.saveChat(newChat, function(err, chat) {
+      if (err)
+        throw err;
+    }); 
+    Chat.getChat({}, function(err, chats) {
+    });
+    io.emit('received-message', data);
   });
 });
 
@@ -90,7 +106,7 @@ passport.use(new FacebookStrategy({
     callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
   }, 
-  /* local host 
+  /* local host  
   passport.use(new FacebookStrategy({
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
@@ -158,7 +174,7 @@ app.get('*', function(req, res, next){
 });
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/chat', chat);
 app.use('/login', login);
 app.use('/registration', registration);
 app.use('/admin', admin);
@@ -195,5 +211,16 @@ app.use(function(err, req, res, next) {
   });
 });
 
+function parseCookies (request) {
+    var list = {},
+        rc = request;
+
+    rc && rc.split(';').forEach(function( cookie ) {
+        var parts = cookie.split('=');
+        list[parts.shift().trim()] = decodeURI(parts.join('='));
+    });
+
+    return list;
+}
 
 module.exports = app;

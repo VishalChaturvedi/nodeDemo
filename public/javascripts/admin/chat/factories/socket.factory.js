@@ -12,8 +12,8 @@
     /* Inject required modules to user factory method */
     SocketFactory.$inject = ['$http', '$location', '$rootScope'];
     /**
-     * @name UserFactory
-     * @desc Contains logic to store, retrieve, update and delete data of user settings in DB
+     * @name SocketFactory
+     * @desc Contains logic to send and recive data through socket
      * @param $http
      * @param $location
      * @param $rootScope
@@ -22,7 +22,7 @@
      */
     function SocketFactory($http, $location, $rootScope)
     {
-        var socket = io.connect("http://localhost:8080");
+        var socket = io.connect();
         return {
             on: function(eventName, callback){
                 socket.on(eventName, callback);
@@ -30,8 +30,6 @@
             emit: function(eventName, data) {
                 socket.emit(eventName, data);
             }
-
-            
         };
     }
 })();

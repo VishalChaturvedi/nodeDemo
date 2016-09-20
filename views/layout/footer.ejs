@@ -13,57 +13,6 @@
     <script defer src="/javascripts/front/common/common.js"></script>
     <script defer src="/javascripts/front/common/factories/common.factory.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
-    <script>
-	
-
-    // validate login form 
-    $("#login").validate({
-			rules: {
-				password: {
-					required: true,
-					minlength: 6
-				},
-			email: {
-				required: true,
-				email: true
-			}
-		}
-	});
-
-	// validate sign up form 
-    $("#registration").validate({
-			rules: {
-				name: {
-					required: true,
-				},
-				password: {
-					required: true,
-					minlength: 6
-				},
-			email: {
-				required: true,
-				email: true
-			}
-		}
-	});
-
-	// validate sign up form 
-    $("#contact").validate({
-		rules: {
-			name: {
-				required: true,
-			},
-			comment: {
-				required: true,
-				minlength: 6,
-				maxlength: 150
-			},
-			email: {
-				required: true,
-				email: true
-			}
-		}
-	});
-    </script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-cookies.min.js"></script>
   </body>
 </html>

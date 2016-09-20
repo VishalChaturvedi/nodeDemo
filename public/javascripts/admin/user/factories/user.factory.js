@@ -35,6 +35,17 @@
                 })
             },
 
+            /**
+             * [GetloginUsers]
+             *
+             */
+            GetLoginUsers: function(callback) {
+                return $http.post(window.path + 'admin/loggedInUserList', {})
+                    .success(function(response) {
+                    callback(response);
+                })
+            },
+    
 
             /*
              * @name GetUserData

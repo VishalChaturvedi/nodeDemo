@@ -55,13 +55,19 @@ router.post('/api', function(req, res, next) {
       if (err) { 
         return next(err); 
       }
+
+      User.updateUser(user._id, {loginStatus:1}, function(err, User) {
+            
+      });
       req.flash('userRole', req.user.userRole);
         req.app.io.emit('notification', {
-            message: 'new customer',
+            message: 'Join user',
             name: req.user.name
         });
+
       var response = {
-            status:'true'
+            status:'true',
+            data:{name:req.user.name,id:req.user.id}
         }
     res.send(response);
     });

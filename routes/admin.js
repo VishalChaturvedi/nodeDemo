@@ -23,6 +23,17 @@ router.post('/userList', ensureAuthenticated, function(req, res, next) {
     });
 });
 
+/* Get User list  */
+router.post('/loggedInUserList', ensureAuthenticated, function(req, res, next) {
+    User.getLoggedInUser(function(err, users) {
+        var response = {
+            status:'true',
+            data:users
+        }
+        res.send(response);
+    });
+});
+
 /* GET user  details. */
 router.post('/userDetails',ensureAuthenticated, function(req, res, next) {
    if(typeof req.body.id === 'undefined'){

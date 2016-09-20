@@ -52,6 +52,116 @@ body {
 .marketing p + h4 {
   margin-top: 28px;
 }
+/* Chat box */
+
+.chat span
+{
+    display: inline-block;
+    max-width: 70%;
+    background-color: white;
+    padding: 5px;
+    border-radius: 4px;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+    border-color: grey;
+}
+
+.chat left
+{
+    float: left;
+}
+
+.chat span.left:after
+{
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: -8.5px;
+    top: 7px;
+    height: 0px;
+    width: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid white;
+}
+
+.chat span.left:before
+{
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: -9px;
+    top: 7px;
+    height: 0px;
+    width: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid black;
+}
+
+.chat span.right:after
+{
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: -8px;
+    top: 6px;
+    height: 0px;
+    width: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid #dbedfe;
+}
+
+.chat span.right:before
+{
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: -9px;
+    top: 6px;
+    height: 0px;
+    width: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid black;
+}
+
+.chat span.right
+{
+    float: right;
+    background-color: #dbedfe;
+}
+
+.chat .clear
+{
+    clear: both;
+}
+
+.chat label.right 
+{
+  font-size: smaller;
+  float: right;
+}
+
+.chat label.left 
+{
+  font-size: smaller;
+  float: left;
+}
+
+.chat .hide
+{
+  display: none;
+}
+
+.chat{
+height:280px;
+overflow-y:auto; 
+overflow-x:hidden; 
+}
+/* End chat box */
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {

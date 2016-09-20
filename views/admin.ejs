@@ -9,7 +9,7 @@
     <title>Demo App Admin </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
     <!-- Custom styles for this template -->
     <link href="/stylesheets/style.css" rel="stylesheet">
@@ -31,11 +31,10 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             <% if(typeof(user) != 'undefined' && user != null ){ %>
-
               <% if(userRole == '0'){ %>
               <li role="presentation"><a href="#/user">Manage User</a></li>
               <% } %>
-            <!--li role="presentation"><a href="#/chat">Chat</a></li-->  
+            <li role="presentation"><a href="#/chat">Chat</a></li>  
             <li role="presentation"><a href="#/profile">Profile</a></li>
             <li role="presentation"><a href="/logout">Logout</a></li>
             <% }else { %>
@@ -69,7 +68,8 @@
     <script defer src="/javascripts/admin/user/factories/user.factory.js"></script>
     <script defer src="/javascripts/admin/chat/chat.js"></script>
     <script defer src="/javascripts/admin/chat/factories/socket.factory.js"></script>
+    <script defer src="/javascripts/admin/chat/factories/chat.factory.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/1.1.0/toaster.min.js"></script>
-    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular-cookies.min.js"></script>
   </body>
 </html>

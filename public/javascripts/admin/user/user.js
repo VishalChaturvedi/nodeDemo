@@ -12,7 +12,8 @@
 	angular
 	.module('adminApp.user', [
     	'ngRoute',
-        'toaster'
+        'toaster',
+        'ngCookies'
 	])
 	.config(config)
     .controller('UserController', UserController)
