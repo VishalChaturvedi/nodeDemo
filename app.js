@@ -27,11 +27,22 @@ var login = require('./routes/login');
 var registration = require('./routes/registration');
 var app = express();
 
-/* Socket Connnection */
+/* Socket Connnection local 
 var http = require('http').Server(app);
-http.listen(3000, "127.0.0.1");
+http.listen(5000, "127.0.0.1");
 var io = require('socket.io')(http);
+/* Ended scoket local  */
+
+/* Socket connection heroku */
+io = require('socket.io').listen(app),
+io.configure(function () {  
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+/* Ended socket heroku */
 app.io = io;
+
+
 /* End socket connection */
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,16 +57,19 @@ io.on('connection', function(socket){
   users.push(socket.userid);
   
   socket.on('disconnect',function(data){
-    console.log(socket.userid);
     users.splice(users.indexOf(socket.userid),1);
     connections.splice(connections.indexOf(socket),1);
-     io.emit('notification', {
-            message: 'Left user',
-            name: socket.username
-    }); 
-    User.updateUser(socket.userid,{loginStatus:0}, function(err, User) {
-            
-    }); 
+    if(users.indexOf(socket.userid) == "-1"){
+      io.emit('notification', {
+              message: 'Left user',
+              name: socket.username
+      }); 
+      User.updateUser(socket.userid,{loginStatus:0}, function(err, User) {
+              
+      }); 
+    }else{
+      // Do nothing...
+    }
   });
 
   socket.on('typing', function(data) {
@@ -99,20 +113,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-/* heroku Host */
+/* heroku Host 
 passport.use(new FacebookStrategy({
     clientID: '778533818956590',
     clientSecret: 'e29dcaf9644c8c1105155854914e7a8a',
     callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  }, 
-  /* local host  
+  }, */
+  /* local host  */
   passport.use(new FacebookStrategy({
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  }, */
+  }, 
 
   function(accessToken, refreshToken, profile, cb) {
     var name  = profile.displayName;
