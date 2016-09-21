@@ -27,19 +27,13 @@ var login = require('./routes/login');
 var registration = require('./routes/registration');
 var app = express();
 
-/* Socket Connnection local 
+/* Socket Connnection local */
 var http = require('http').Server(app);
-http.listen(5000, "127.0.0.1");
+http.listen(3000, "127.0.0.1");
 var io = require('socket.io')(http);
 /* Ended scoket local  */
 
-/* Socket connection heroku */
-io = require('socket.io').listen(app),
-io.configure(function () {  
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
-/* Ended socket heroku */
+
 app.io = io;
 
 
