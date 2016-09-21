@@ -27,17 +27,14 @@ var login = require('./routes/login');
 var registration = require('./routes/registration');
 var app = express();
 
-/* Socket Connnection local */
+/* Socket Connnection */
 var http = require('http').Server(app);
-http.listen(5000, "127.0.0.1");
+http.listen(process.env.PORT || 5000);
 var io = require('socket.io')(http);
-/* Ended scoket local  */
-
-
 app.io = io;
-
-
 /* End socket connection */
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -107,21 +104,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-/* heroku Host  */
+/* heroku Host 
 passport.use(new FacebookStrategy({
     clientID: '778533818956590',
     clientSecret: 'e29dcaf9644c8c1105155854914e7a8a',
     callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
-  },
-  /* local host  
+  }, */
+  /* local host  */
   passport.use(new FacebookStrategy({
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
   }, 
-*/
+
   function(accessToken, refreshToken, profile, cb) {
     var name  = profile.displayName;
     var email  = profile.emails[0].value;
