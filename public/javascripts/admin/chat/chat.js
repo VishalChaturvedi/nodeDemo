@@ -43,8 +43,8 @@
      */
     function ChatController($scope, $location, $http, SocketFactory,UserFactory,toaster,$cookies) {
 
-        $scope.newCustomers = [];
-        $scope.currentCustomer = [];
+        $scope.newUsers = [];
+        $scope.currentUser = [];
         
         /*$scope.join = function() {
             SocketFactory.emit('add-customer', $scope.currentCustomer);
@@ -52,9 +52,19 @@
         $scope.join();*/
 
         function getOnlineUser(){
+
              UserFactory.GetAllUsers(function (response) {
                 if (response.status){ 
-                    $scope.newCustomers = response.data;
+                   var UserInfo = $cookies.getObject('demoApp'); 
+                   $scope.newUsers = [];
+                   angular.forEach(response.data, function(value, key) {
+                        console.log(value);
+                        if(value._id != UserInfo.id){
+                            $scope.newUsers.push(value);
+                        }
+                    });
+                    //$scope.newUsers = response.data;
+
                 }else{
                     //$location.path('/user/login');
                 }
@@ -66,7 +76,7 @@
 
         SocketFactory.on('notification', function(data) {
             $scope.$apply(function () {
-                $scope.currentCustomer.push(data);
+                $scope.currentUser.push(data);
                 if(data.message == "Join user")    
                     toaster.pop('success', data.message, data.name);
                 else

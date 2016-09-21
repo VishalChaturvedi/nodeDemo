@@ -2,11 +2,11 @@
   <div id="messageArea" class="row">
       <div class="col-md-4" ng-controller="ChatController as chat">
         <div class="well"> 
-          <h3>Online Users</h3>
+          <h3>Users</h3>
           <ul style="list-style: outside none none;">
-            <li ng-repeat="customer in newCustomers">
-              {{customer.name}}
-              <a href=""><span ng-class="(customer.loginStatus==1) ? 'glyphicon glyphicon-ok-sign' : ''"></span> </a>
+            <li ng-repeat="user in newUsers">
+              {{user.name}}
+              <a href=""><span ng-class="(user.loginStatus==1) ? 'glyphicon glyphicon-ok-sign' : ''"></span> </a>
             </li>
           </ul>
         </div>
