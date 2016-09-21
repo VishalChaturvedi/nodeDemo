@@ -72,6 +72,7 @@ router.get('/logout', function(req, res) {
             message: 'Left user',
             name: name
     });
+    res.cookie('demoApp','');
     req.flash('success', 'You are now logged out');
     res.redirect('/');
 });

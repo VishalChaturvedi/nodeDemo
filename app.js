@@ -42,7 +42,10 @@ app.set('view engine', 'ejs');
 io.on('connection', function(socket){
   connections.push(socket);
   var cookies = parseCookies(socket.client.request.headers.cookie);
-  cookies = JSON.parse(decodeURIComponent(cookies.demoApp));
+  var str = cookies.demoApp;
+  str = "{"+str.substring(str.indexOf("{") + 1);
+  cookies = JSON.parse(decodeURIComponent(str));
+  
   socket.userid = cookies.id;
   socket.username = cookies.name;
   users.push(socket.userid);
@@ -111,7 +114,7 @@ passport.use(new FacebookStrategy({
     callbackURL: "https://sysdemoapp.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'emails', 'name','displayName'],
   }, 
-  /* local host  
+  /* local host   
   passport.use(new FacebookStrategy({
     clientID: '200684187016093',
     clientSecret: '7e3fa67cf9773fb3d20c13f4d72adea3',
@@ -124,17 +127,26 @@ passport.use(new FacebookStrategy({
     var email  = profile.emails[0].value;
     User.getUserByEmail(email, function (err, user) {
       if(user){
+        User.updateUser(user._id, {loginStatus:1}, function(err, User) {
+            
+        });
         return cb(null, user);
       }else{
         var newUser = new User({
           name : name,
           email: email,
+          loginStatus:1
         });
         User.createFbUser(newUser, function (err, user) {
           return cb(null, user);
         });
       }
+      io.emit('notification', {
+            message: 'Join user',
+            name: name
+      });
     });
+    
   }
 ));
 
@@ -145,7 +157,11 @@ app.get('/auth/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
+
+    res.cookie('demoApp',{name:req.user.name,id:req.user._id}, { maxAge: 900000, httpOnly: false });
+    
     res.redirect('/admin');
+    
   });
 
 // Validator middleware 

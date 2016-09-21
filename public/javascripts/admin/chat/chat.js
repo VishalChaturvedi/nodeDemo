@@ -35,17 +35,17 @@
 
 
     /* Inject required stuff as parameters to user controller function */
-    ChatController.$inject = ['$scope', '$location', '$http', 'SocketFactory', 'UserFactory','toaster','$cookies','$timeout'];
+    ChatController.$inject = ['$scope', '$location', '$http', 'SocketFactory', 'UserFactory','toaster','$cookies'];
     /**
      * Chat Controller
      * Created by: Vishal Chaturvedi
      * Created On: 08-09-2016
      */
-    function ChatController($scope, $location, $http, SocketFactory,UserFactory,toaster,$cookies,$timeout) {
+    function ChatController($scope, $location, $http, SocketFactory,UserFactory,toaster,$cookies) {
 
         $scope.newCustomers = [];
         $scope.currentCustomer = [];
-        $scope.typing = typing;
+        
         /*$scope.join = function() {
             SocketFactory.emit('add-customer', $scope.currentCustomer);
         };
@@ -74,48 +74,31 @@
                 getOnlineUser();
             });
         });
-
-        function typing(){
-            var UserInfo = $cookies.get('demoApp');
-            SocketFactory.emit('typing',UserInfo);
-        }
-
-        SocketFactory.on('typing', function(data) {
-            $scope.$apply(function () {
-                var UserInfo = $cookies.getObject('demoApp');
-                data = JSON.parse(data);
-                if(data.name != UserInfo.name){
-                    $scope.typingNotification = data.name+" is typeing";
-                    $timeout(function(){
-                        $scope.typingNotification= '';    
-                    }, 3000);
-                }
-            });
-        });
     }    
 
     /* Inject required stuff as parameters to user login controller function */
-    MessagesController.$inject = ['$scope', '$location', '$http', 'SocketFactory','toaster','$cookies','ChatFactory'];
+    MessagesController.$inject = ['$scope', '$location', '$http', 'SocketFactory','toaster','$cookies','ChatFactory','$timeout'];
     /**
      * User Login Controller
      * Created by: Vishal Chaturvedi
      * Created On: 08-09-2016
      */
-    function MessagesController($scope, $location, $http, SocketFactory, toaster,$cookies,ChatFactory) {
+    function MessagesController($scope, $location,$http,SocketFactory,toaster,$cookies,ChatFactory,$timeout) {
         $scope.newMessage = [];
         $scope.send_message = send_message;
+        $scope.typing = typing;
         var vm = this;
         vm.send_message = send_message;
+        vm.typing = typing;
         var UserInfo = $cookies.get('demoApp');
         UserInfo = JSON.parse(UserInfo);
-
+        
         /* Get Old messages */
         function getChatMessages(){
             ChatFactory.GetChatMessages(function (response) {
                 if (response.status){ 
                     var UserInfo = $cookies.getObject('demoApp');
                     angular.forEach(response.data, function(value, key) {
-                        
                         if(value.senderName != UserInfo.name){
                             $scope.newMessage.push(value);
                         }else{
@@ -130,6 +113,12 @@
             });
         }
         getChatMessages();
+
+        function typing(){
+            var UserInfo = $cookies.get('demoApp');
+            SocketFactory.emit('typing',UserInfo);
+        }
+
         /* Send Messages */
         function send_message(){
             if(vm.chat.message !=''){
@@ -153,6 +142,19 @@
                 }else{
                     data['self'] = true;
                     $scope.newMessage.push(data);
+                }
+            });
+        });
+
+        SocketFactory.on('typing', function(data) {
+            $scope.$apply(function () {
+                var UserInfo = $cookies.getObject('demoApp');
+                data = JSON.parse(data);
+                if(data.name != UserInfo.name){
+                    $scope.typingNotification = data.name+" is typeing";
+                    $timeout(function(){
+                        $scope.typingNotification= '';    
+                    }, 3000);
                 }
             });
         });
